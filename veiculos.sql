@@ -1,6 +1,9 @@
 DROP TABLE IF EXISTS `condutor_veiculo`;
+DROP TABLE IF EXISTS `condutor_infracao`;
 DROP TABLE IF EXISTS `condutor`;
 DROP TABLE IF EXISTS `veiculo`; 
+DROP TABLE IF EXISTS `infracao`; 
+DROP TABLE IF EXISTS `cidade`; 
 
 CREATE TABLE condutor(
     id INT,
@@ -56,7 +59,7 @@ INSERT INTO veiculo VALUES
   
 CREATE TABLE condutor_veiculo(
 	id INT,
-    id_veiculo INT,
+    id_veiculo INT UNIQUE,
     id_condutor INT,
     PRIMARY KEY(id),
     CONSTRAINT `FK_CONDUTOR_VEICULO_VEICULO` FOREIGN KEY (`id_veiculo`) REFERENCES `veiculo`(`id`) ON DELETE CASCADE,
@@ -83,3 +86,80 @@ INSERT INTO condutor_veiculo VALUES
     (17, 17, 3),
     (18, 18, 3);
 
+
+CREATE TABLE infracao(
+	id INT,
+    codigo CHAR(4) UNIQUE,
+    gravidade INT,
+    descricao VARCHAR(240),
+    PRIMARY KEY (id)    
+);
+
+INSERT INTO infracao VALUES
+    (1, "4561", 1, "Deixar de prestar socorro à vítima de acidente quando solicitado pelas autoridades"),
+    (2, "5462", 4, "Usar a buzina desrespeitando os padrões e as frequências estabelecidas por lei"),
+    (3, "1458", 4, "Conduzir veículo sem os documentos obrigatórios (CNH e CRLV)"),
+    (4, "7554", 1, "Estacionar veículos em viadutos, pontes ou túneis"),
+    (5, "7466", 1, "Estacionar ao lado de outro veículo, formando fila dupla"),
+    (6, "1647", 2, "Dirigir com o braço para o lado de fora da janela"),
+    (7, "7561", 5, "Ultrapassar pela direita"),
+    (8, "7645", 5, "Parar o veículo na contramão de direção"),
+    (9, "1354", 2, "Dirigir veículo segurando ou manuseando celular"),
+    (10, "4564", 2, "Estacionar no passeio"),
+    (11, "7986", 1, "Deixar de usar o cinto de segurança"),
+    (12, "3584", 3, "Avançar o sinal vermelho"),
+    (13, "7486", 3, "Excesso de velocidade");
+
+    
+CREATE TABLE cidade(
+	id INT,
+    uf CHAR(2),
+    nome_cidade VARCHAR(50),
+    PRIMARY KEY (id),
+    constraint UC_cidade unique (uf,nome_cidade)
+);
+
+INSERT INTO cidade VALUES
+    (1, "MG", "Belo Horizonte"),
+    (2, "MG", "Alfenas"),
+    (3, "MG", "Divinópolis"),
+    (4, "MG", "Curvelo"),
+    (5, "MG", "Uba"),
+    (6, "MG", "Viçosa"),
+    (7, "MG", "Pouso Alegre"),
+    (8, "MG", "Sete Lagoas"),
+    (9, "MG", "Betim"),
+    (10, "MG", "Ibirité");
+    
+
+
+CREATE TABLE condutor_infracao(
+	id INT,
+    id_infracao INT,
+    id_condutor INT,
+    data_ocorrencia DATE,
+    id_cidade INT,
+    PRIMARY KEY(id),
+    CONSTRAINT `FK_CONDUTOR_INFRACAO_INFRACAO` FOREIGN KEY (`id_infracao`) REFERENCES `infracao`(`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_CONDUTOR_INFRACAO_CONDUTOR` FOREIGN KEY (`id_condutor`) REFERENCES `condutor`(`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_CONDUTOR_INFRACAO_CIDADE` FOREIGN KEY (`id_cidade`) REFERENCES `cidade`(`id`) ON DELETE CASCADE
+);
+
+INSERT INTO condutor_infracao VALUES
+    (1,1,1, "2021-01-20", 1),
+    (2,2,2, "2021-01-20", 2),
+    (3,3,3, "2021-01-20", 3),
+    (4,4,4, "2021-01-20", 4),
+    (5,5,5, "2021-01-20", 5),
+    (6,6,6, "2021-01-20", 6),
+    (7,7,7, "2021-01-20", 7),
+    (8,8,8, "2021-01-20", 8),
+    (9,9,9, "2021-01-20", 9),
+    (10,10,10, "2021-01-20", 10),
+    (11,11,11, "2021-01-20", 1),
+    (12,12,10, "2021-01-20", 1),
+    (13,13,10, "2021-01-20", 3),
+    (14,2,4, "2021-01-20", 2),
+    (15,2,4, "2021-01-20", 2),
+    (16,9,2, "2021-01-20", 2),
+    (17,9,2, "2021-01-20", 2);
