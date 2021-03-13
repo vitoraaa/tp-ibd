@@ -1,5 +1,7 @@
+use veiculos;
 DROP TABLE IF EXISTS `condutor_veiculo`;
 DROP TABLE IF EXISTS `condutor_infracao`;
+DROP TABLE IF EXISTS `condutor_cidade`;
 DROP TABLE IF EXISTS `condutor`;
 DROP TABLE IF EXISTS `veiculo`; 
 DROP TABLE IF EXISTS `infracao`; 
@@ -163,3 +165,26 @@ INSERT INTO condutor_infracao VALUES
     (15,2,4, "2021-01-20", 2),
     (16,9,2, "2021-01-20", 2),
     (17,9,2, "2021-01-20", 2);
+
+
+CREATE TABLE condutor_cidade(
+    id INT,
+    id_condutor INT UNIQUE,
+    id_cidade INT,
+    PRIMARY KEY (id),
+    CONSTRAINT `FK_CONDUTOR_CIDADE_CONDUTOR` FOREIGN KEY (`id_condutor`) REFERENCES `condutor`(`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_CONDUTOR_CIDADE_CIDADE` FOREIGN KEY (`id_cidade`) REFERENCES `cidade`(`id`) ON DELETE CASCADE
+);
+
+INSERT INTO condutor_cidade VALUES
+    (1, 1, 1),
+    (2, 2, 2),
+    (3, 3, 2),
+    (4, 4, 4),
+    (5, 5, 5),
+    (6, 6, 5),
+    (7, 7, 5),
+    (8, 8, 8),
+    (9, 9, 9),
+    (10, 10, 10),
+    (11, 11, 10);
